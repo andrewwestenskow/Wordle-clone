@@ -9,7 +9,7 @@ import (
 func askForGameType() string{
 	var gameType string
 	
-	fmt.Println("Would you like to play in the browser or the console?")
+	fmt.Println("Would you like to play in the console or the browser?")
 	fmt.Println("[1] Console")
 	fmt.Println("[2] Browser")
 	fmt.Scan(&gameType)

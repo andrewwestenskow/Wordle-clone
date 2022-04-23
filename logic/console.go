@@ -15,20 +15,42 @@ func printWordMap(){
 	}
 }
 
+func playAgain(){
+	var ans string
+
+	fmt.Scan(&ans)
+
+	if ans == "y" {
+		InitializeGame("console")
+	} else if ans == "n" {
+		fmt.Println("Thanks for playing!")
+	} else {
+		playAgain()
+	}
+}
+
 func consoleTurn(){
 	var guess string
 	fmt.Print("Enter your guess: ")
 	fmt.Scan(&guess)
 
-	isCorrect := handleGuess(guess)
+	isCorrect, err := handleGuess(guess)
 
-	printWordMap()
-
-	if isCorrect {
-		fmt.Printf("You did it!  It only took you %d guesses!", Game.numGuesses)
-	} else if Game.numGuesses < 5 {
+	if err != nil {	
+		fmt.Println("You don't count so well, try again using a 5 letter word")
 		consoleTurn()
-	} else {
-		fmt.Printf("You lost, better luck next time.  Your word was %s", Game.word)
+		} else {
+		printWordMap()
+
+		if isCorrect {
+			fmt.Printf("You did it!  It only took you %d guesses!\n", Game.numGuesses)
+			playAgain()
+		} else if Game.numGuesses < 5 {
+			consoleTurn()
+		} else {
+			fmt.Printf("You lost, better luck next time.  Your word was %s\n", Game.word)
+			playAgain()
+		}
 	}
+
 }

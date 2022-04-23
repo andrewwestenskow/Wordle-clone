@@ -40,7 +40,6 @@ func InitializeGame(gameType string) {
 
 	if(Game.gameType == "console"){
 		fmt.Println("I'm thinking of a 5 letter word......")
-		fmt.Println(Game.word)
 		consoleTurn()
 	} else if Game.gameType == "browser" {
 		fmt.Println("Coming soon.....")
