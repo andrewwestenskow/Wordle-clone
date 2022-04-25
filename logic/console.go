@@ -5,6 +5,8 @@ import (
 	"strings"
 )
 
+// printWordMap prints the current wordmap to the console
+// returns nothing
 func printWordMap(){
 	for i := len(Game.WordMap) - 1; i>=0; i-- {
 		if Game.NumGuesses >= i + 1 {
@@ -15,6 +17,10 @@ func printWordMap(){
 	}
 }
 
+// playAgain asks the player if they would like to play again
+// should only accept "y" or "n" as input
+// if "n" is input, the process exits
+// returns nothing
 func playAgain(){
 	var ans string
 
@@ -29,6 +35,10 @@ func playAgain(){
 	}
 }
 
+// consoleTurn handles one round of the game in the console
+// asks the player for their guess and passes the resulting input off for verification logic
+// called recursively if there are remaining guesses available
+// returns nothing
 func consoleTurn(){
 	var guess string
 	fmt.Print("Enter your guess: ")

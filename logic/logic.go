@@ -35,6 +35,9 @@ func handleGuess(guess string) (bool, error){
 	}
 }
 
+// verifyLetter verifies a single letter in a guess
+// accepts a split string (the game word), a single letter (to be verified), and an index(the letter's position in the guessed word)
+// returns 2 booleans indicating the correctness of the guessed letters value and position
 func verifyLetter(word []string, letter string, index int) (bool, bool) {
 	if word[index] == letter {
 		return true, true
@@ -50,6 +53,9 @@ func verifyLetter(word []string, letter string, index int) (bool, bool) {
 	return false, false
 }
 
+// generateWordMap creates a word map for the given guess
+// accepts a split string (the guessed word)
+// returns a slice containing 5 strings, each one representing a letter in the guessed word.  "O" indicates the letter is both correct and in the correct position, "I" indicates that the letter is correct but the position is wrong, and "X" indicates that the letter is incorrect
 func generateWordMap(guess string) []string {
 	wordSlice := strings.Split(Game.word, "")
 	guessSlice := strings.Split(guess, "")
