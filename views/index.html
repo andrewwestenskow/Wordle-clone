@@ -1,12 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  <div>HELLO THERE</div>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WORDLE</title>
+  </head>
+  <body>
+    <div>WORDLE</div>
+    <form id="guess-form">
+      <input name="guess" id="guess-box" autocomplete="off" />
+    </form>
+    <div id="game-area"></div>
+  </body>
+  <script>
+    const addr = 'http://localhost:4000'
+    const form = document.getElementById('guess-form')
+    const input = document.getElementById('guess-box')
+    const game = document.getElementById('game-area')
+    const charMap = {
+      empty: '_',
+      correct: 'O',
+      placement: 'I',
+      wrong: 'X',
+    }
+
+    fetch(`${addr}/game`)
+      .then((res) => res.json())
+      .then((data) => {
+        printWordMap(data.WordMap, data.Guesses)
+      })
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault()
+      const formData = new FormData(form)
+      const guess = formData.get('guess')
+      form.reset()
+      if (guess.length === 5) {
+        fetch(`${addr}/guess`, {
+          method: 'POST',
+          body: JSON.stringify({ guess }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            printWordMap(data.WordMap, data.Guesses)
+            if (data.Win) {
+              win()
+            }
+            if (data.NumGuesses === 5) {
+              input.disabled = true
+              if (data.Win) {
+                win()
+              } else {
+                lose()
+              }
+            }
+          })
+      } else {
+        alert('Your guess must be 5 letters')
+      }
+    })
+
+    function win() {
+      alert('YOU WIN')
+      playAgain()
+    }
+
+    function lose() {
+      fetch(`${addr}/word`)
+        .then((res) => res.json())
+        .then((data) => {
+          alert(`You lose, your word was ${data.Word}`)
+          playAgain()
+        })
+    }
+
+    function playAgain() {
+      if (confirm('Play again?')) {
+        fetch(`${addr}/reset`)
+          .then((res) => res.json())
+          .then((data) => {
+            printWordMap(data.WordMap, data.Guesses)
+            input.disabled = false
+          })
+      }
+    }
+
+    function getClassName(char) {
+      switch (char) {
+        case charMap.empty:
+          return 'empty'
+        case charMap.correct:
+          return 'correct'
+        case charMap.placement:
+          return 'placement'
+        case charMap.wrong:
+          return 'wrong'
+      }
+    }
+
+    function printWordMap(wordMap, guesses) {
+      game.innerHTML = ''
+
+      wordMap.forEach((e, i) => {
+        const row = document.createElement('div')
+        row.classList.add('row')
+        e.forEach((f, j) => {
+          const letter = document.createElement('p')
+          letter.classList.add('letter')
+          letter.classList.add(getClassName(f))
+          letter.innerText = guesses[i] ? guesses[i][j] : ''
+          row.appendChild(letter)
+        })
+        game.appendChild(row)
+      })
+    }
+  </script>
+  <style>
+    .row {
+      display: grid;
+      grid-template-columns: repeat(5, 25px);
+      grid-column-gap: 5px;
+    }
+
+    .letter {
+      width: 25px;
+      height: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid black;
+    }
+
+    .correct {
+      background: green;
+    }
+
+    .placement {
+      background: yellow;
+    }
+
+    .wrong {
+      background: red;
+    }
+  </style>
 </html>

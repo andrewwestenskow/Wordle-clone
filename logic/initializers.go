@@ -20,7 +20,7 @@ func initializeGameState(gameType string) GameState {
 	state := GameState{
 		word: word,
 		Guesses: []string{},
-		wordMap: [][]string{
+		WordMap: [][]string{
 			{"_","_","_","_","_"},
 			{"_","_","_","_","_"},
 			{"_","_","_","_","_"},
@@ -29,7 +29,7 @@ func initializeGameState(gameType string) GameState {
 		},
 		Win: false,
 		gameType: gameType,
-		numGuesses: 0,
+		NumGuesses: 0,
 	}
 
 	return state
@@ -42,7 +42,8 @@ func InitializeGame(gameType string) {
 		fmt.Println("I'm thinking of a 5 letter word......")
 		consoleTurn()
 	} else if Game.gameType == "browser" {
-		fmt.Println("Coming soon.....")
+		fmt.Println("To play, open http://localhost:4000")
+		initializeBrowserGame()
 	}
 
 }

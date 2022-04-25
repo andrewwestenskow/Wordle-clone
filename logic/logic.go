@@ -8,10 +8,10 @@ import (
 type GameState struct {
 	word string
 	Guesses []string
-	wordMap [][]string
+	WordMap [][]string
 	gameType string
 	Win bool
-	numGuesses int
+	NumGuesses int
 }
 
 var Game GameState
@@ -21,13 +21,13 @@ var Game GameState
 func handleGuess(guess string) (bool, error){
 	if(len(guess) == 5){
 		Game.Guesses = append(Game.Guesses, guess)
-		Game.numGuesses++
+		Game.NumGuesses++
+		wordMap := generateWordMap(guess)
+		Game.WordMap[Game.NumGuesses - 1] = wordMap
 	
 		if guess == Game.word {
 			return true, nil
 		} else {
-			wordMap := generateWordMap(guess)
-			Game.wordMap[Game.numGuesses - 1] = wordMap
 			return false, nil
 		}
 	} else {
